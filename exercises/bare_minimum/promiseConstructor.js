@@ -39,6 +39,6 @@ var getStatusCodeAsync = function(url) {
 
 // Export these functions so we can test them and reuse them in later exercises
 module.exports = {
-  getStatusCodeAsync: getStatusCodeAsync,
-  pluckFirstLineFromFileAsync: pluckFirstLineFromFileAsync
+  getStatusCodeAsync,
+  pluckFirstLineFromFileAsync
 };
