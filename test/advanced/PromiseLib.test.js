@@ -22,7 +22,7 @@ describe('PromiseLib', function() {
           expect(content.toString()).to.contain('This is a file to read');
           done();
         })
-        .catch(done);
+        .catch(() => done());
     });
 
     it('should make file content available in the `catch` block', function(done) {

@@ -1,9 +1,9 @@
 // You should only use the `new Promise` constructor from bluebird
-var Promise = require('bluebird');
+var Promise = require("bluebird");
 
 /**
  * Return a function that wraps `nodeStyleFn`. When the returned function is invoked,
- * it will return a promise which will be resolved or rejected, depending on 
+ * it will return a promise which will be resolved or rejected, depending on
  * the execution of the now-wrapped `nodeStyleFn`
  *
  * In other words:
@@ -14,10 +14,32 @@ var Promise = require('bluebird');
  * expect a callback function as one of its arguments
  */
 
-var promisify = function(nodeStyleFn) {
- // TODO
-};
+// var pluckFirstLineFromFile = function(filePath, callback) {
+//   fs.readFile(filePath, (err, text) => {
+//     if (err) {
+//       callback(err);
+//     } else {
+//       var textString = text.toString("utf8");
+//       var firstLine = textString.split("\n")[0];
+//       callback(null, firstLine);
+//     }
+//   });
+// };
 
+var promisify = function(nodeStyleFn) {
+  // TODO
+  return arg => {
+    return new Promise((resolve, reject) => {
+      nodeStyleFn(arg, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  };
+};
 
 /**
  * Given an array which contains promises, return a promise that is
@@ -32,8 +54,20 @@ var promisify = function(nodeStyleFn) {
 
 var all = function(arrayOfPromises) {
   // TODO
+  return new Promise((resolve, reject) => {
+    const result = [];
+    arrayOfPromises.forEach( (promise, i) => {
+      promise
+        .then(data => {
+          result[i] = data;
+          if (result.length === arrayOfPromises.length) {
+            resolve(result);
+          }
+        })
+        .catch(err => reject(err));
+    });
+  });
 };
-
 
 /**
  * Given an array of promises, return a promise that is resolved or rejected,
@@ -43,6 +77,15 @@ var all = function(arrayOfPromises) {
 
 var race = function(arrayOfPromises) {
   // TODO
+  return new Promise((resolve, reject) => {
+    arrayOfPromises.forEach( (promise) => {
+      promise
+        .then(data => {
+          resolve(data);
+        })
+        .catch(err => reject(err));
+    });
+  });
 };
 
 // Export these functions so we can unit test them
